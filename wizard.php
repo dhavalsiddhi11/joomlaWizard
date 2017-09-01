@@ -6160,7 +6160,7 @@ class JWText extends JWAbstractObject
 		'EXTRACT_FILES'                   => 'Extract files',
 		'BTN_START'                       => 'Start',
 		'EXTRACTING'                      => 'Extracting',
-		'DO_NOT_CLOSE_EXTRACT'            => 'Do not close this window while the extraction is in progress',
+		'DO_NOT_CLOSE_EXTRACT'            => 'Please Wait.Do not Refresh Page',
 		'RESTACLEANUP'                    => 'Restoration and Clean Up',
 		'BTN_RUNINSTALLER'                => 'Run the Installer',
 		'BTN_CLEANUP'                     => 'Clean Up',
@@ -8849,29 +8849,37 @@ function getTemplates()
 		?>
 		<script>
 			$( document ).ready(function() {
+								
+				$(".tentry-panel").click(function() {
+					
+				    $(this).parent().addClass('active').siblings().removeClass('active');
+				    				
+				});
 			    
 			    $( ".tentry" ).click(function() {
-			    
-			    	var url=$(this).attr("data-url");
-			    	$('#kickstart.setup.sourcefile').val('"'+url+'"');
-			    	alert(url);	
 			    	
+			    	
+			    				    
+			    	var url=$(this).attr("data-url");			    	
+			    	$('#kickstart\\.setup\\.sourcefile').val(url);			    				    
 				});
 			});
 			
 		</script>
-		<div class="clearfix">
+		<div class="clearfix temp-insta">
 		<?php
 			foreach($templates as $template)
 			{
 				?>
 				<div data-url="<?php echo $template['zip']; ?>" class="col tentry">
+				  <div class="tentry-panel">	
 					<div class="image" >
 						<img width="150" src="<?php echo "packages/assets/".$template['name']."/template_preview.png"; ?>" alt="<?php echo $template['name']; ?>" />
 					</div>
 					<div class="name">
 						<?php echo $template['name']; ?>
 					</div>
+				 </div>	
 				</div>
 				<?php
 				//print_r($template);
@@ -10752,6 +10760,15 @@ function echoHeadJavascript()
 
 		function onStartExtraction()
 		{
+			var check=$('#kickstart\\.setup\\.sourcefile').val();
+			
+			if(check=='')
+			{
+				alert('Please Select Template.');
+				return false;	
+			}
+			
+						
 			$('#page1').hide('fast');
 			$('#page2').show('fast');
 
@@ -10867,7 +10884,7 @@ function echoHeadJavascript()
 				});
 			}
 			else
-			{
+			{				
 				$('#page2a').hide('fast');
 				$('#extractionComplete').show('fast');
 
@@ -10895,6 +10912,7 @@ function echoHeadJavascript()
 
 		function onRunCleanupClick(event)
 		{
+			
 			post = {
 				'task': 'isJoomla',
 				// Passing the factory preserves the renamed files array
@@ -11181,7 +11199,8 @@ function echoPage()
 			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 		<?php endif; ?>
 		<?php echoHeadJavascript(); ?>
-		<style type="text/css"  href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>"></style>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
 	</head>
 	<body>
 
@@ -11269,114 +11288,17 @@ function echoPage()
 						<div>
 							<?php getTemplates(); ?>
 						</div>
-						<label for="kickstart.setup.sourcefile">ARCHIVE_FILE</label>
+						
 			<span class="field" id="sourcefileContainer">
-				<?php if (!empty($filelist)): ?>
-					<select id="kickstart.setup.sourcefile">
-						<?php echo $filelist; ?>
-					</select>
-				<?php else: ?>
-					<a href="https://www.wizardbackup.com/documentation/troubleshooter/ksnoarchives.html"
-					   target="_blank">NOARCHIVESCLICKHERE</a>
-				<?php endif; ?>
+			
+				<input type="hidden" name="kickstart.setup.sourcefile" id="kickstart.setup.sourcefile" value="" />
 			</span>												
 					</div>
 				</div>
 
 				<div class="clr"></div>
 
-				<!--<div class="step2">
-					<div class="circle">2</div>
-					<h2>SELECT_EXTRACTION</h2>
-					<div class="area-container">
-						<label for="kickstart.procengine">WRITE_TO_FILES</label>
-			<span class="field">
-				<select id="kickstart.procengine">
-					<option value="hybrid">WRITE_HYBRID</option>
-					<option value="direct">WRITE_DIRECTLY</option>
-					<option value="ftp">WRITE_FTP</option>
-					<option value="sftp">WRITE_SFTP</option>
-				</select>
-			</span><br/>
-
-						<label for="kickstart.setup.ignoreerrors">IGNORE_MOST_ERRORS</label>
-						<span class="field"><input type="checkbox" id="kickstart.setup.ignoreerrors"/></span>
-
-						<div id="ftp-options">
-							<label for="kickstart.ftp.host">FTP_HOST</label>
-							<span class="field"><input type="text" id="kickstart.ftp.host"
-							                           value="localhost"/></span><br/>
-							<label for="kickstart.ftp.port">FTP_PORT</label>
-							<span class="field"><input type="text" id="kickstart.ftp.port" value="21"/></span><br/>
-							<div id="ftp-ssl-passive">
-								<label for="kickstart.ftp.ssl">FTP_FTPS</label>
-								<span class="field"><input type="checkbox" id="kickstart.ftp.ssl"/></span><br/>
-								<label for="kickstart.ftp.passive">FTP_PASSIVE</label>
-								<span class="field"><input type="checkbox" id="kickstart.ftp.passive"
-								                           checked="checked"/></span><br/>
-							</div>
-							<label for="kickstart.ftp.user">FTP_USER</label>
-							<span class="field"><input type="text" id="kickstart.ftp.user" value=""/></span><br/>
-							<label for="kickstart.ftp.pass">FTP_PASS</label>
-							<span class="field"><input type="password" id="kickstart.ftp.pass" value=""/></span><br/>
-							<label for="kickstart.ftp.dir">FTP_DIR</label>
-				<span class="field">
-                    <input type="text" id="kickstart.ftp.dir" value=""/>
-                    <?php //<span class="button" id="browseFTP" style="margin-top:0;margin-bottom:0">FTP_BROWSE</span> ?>
-                </span><br/>
-
-							<label for="kickstart.ftp.tempdir">FTP_TEMPDIR</label>
-				<span class="field">
-					<input type="text" id="kickstart.ftp.tempdir"
-					       value="<?php echo htmlentities(JWKickstartUtils::getTemporaryPath()) ?>"/>
-					<span class="button" id="checkFTPTempDir">BTN_CHECK</span>
-					<span class="button" id="resetFTPTempDir">BTN_RESET</span>
-				</span><br/>
-							<label></label>
-							<span class="button" id="testFTP">BTN_TESTFTPCON</span>
-							<a id="notWorking" class="button"
-							   href="https://www.wizardbackup.com/documentation/troubleshooter/kscantextract.html"
-							   target="_blank">CANTGETITTOWORK</a>
-							<br/>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="clr"></div>
-				<div class="step3">
-					<div class="circle">3</div>
-					<h2>FINE_TUNE</h2>
-					<div style="text-align: center;">
-						<span id="showFineTune" class="button bluebutton loprofile"
-						      style="margin: 0">BTN_SHOW_FINE_TUNE</span>
-					</div>
-					<div id="fine-tune-holder" class="area-container" style="display: none">
-						<label for="kickstart.tuning.min_exec_time">MIN_EXEC_TIME</label>
-						<span class="field"><input type="text" id="kickstart.tuning.min_exec_time" value="1"/></span>
-						<span>SECONDS_PER_STEP</span><br/>
-						<label for="kickstart.tuning.max_exec_time">MAX_EXEC_TIME</label>
-						<span class="field"><input type="text" id="kickstart.tuning.max_exec_time" value="5"/></span>
-						<span>SECONDS_PER_STEP</span><br/>
-
-						<label for="kickstart.stealth.enable">STEALTH_MODE</label>
-						<span class="field"><input type="checkbox" id="kickstart.stealth.enable"/></span><br/>
-						<label for="kickstart.stealth.url">STEALTH_URL</label>
-						<span class="field"><input type="text" id="kickstart.stealth.url" value=""/></span><br/>
-
-						<label for="kickstart.setup.renameback">RENAME_FILES</label>
-						<span class="field"><input type="checkbox" id="kickstart.setup.renameback"
-						                           checked="checked"/></span><br/>
-
-						<label for="kickstart.setup.restoreperms">RESTORE_PERMISSIONS</label>
-						<span class="field"><input type="checkbox" id="kickstart.setup.restoreperms"/></span><br/>
-					</div>
-				</div>
-
-				<div class="clr"></div>
-
-				-->
-
+			
 				
 				<div class="step4">					
 					<h2>EXTRACT_FILES</h2>
@@ -11407,8 +11329,7 @@ function echoPage()
 		</div>
 
 		<div id="page2">
-			<div id="page2a">
-				<div class="circle">5</div>
+			<div id="page2a">				
 				<h2>EXTRACTING</h2>
 				<div class="area-container">
 					<div id="warn-not-close">DO_NOT_CLOSE_EXTRACT</div>
@@ -11419,8 +11340,7 @@ function echoPage()
 				</div>
 			</div>
 
-			<div id="extractionComplete" style="display: none">
-				<div class="circle">6</div>
+			<div id="extractionComplete" style="display: none">				
 				<h2>RESTACLEANUP</h2>
 				<div id="runInstaller" class="button">BTN_RUNINSTALLER</div>
 				<div id="runCleanup" class="button" style="display:none">BTN_CLEANUP</div>
@@ -11462,7 +11382,116 @@ function echoPage()
 	</html>
 	<?php
 }
+function echoPage2()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
 
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>
+
+	<!--<div id="fade" class="black_overlay"></div>-->
+
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>
+
+		<div id="header">
+			<div class="title"><div class="circle">6</div>Extension Installer</div>
+		</div>
+
+		
+
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+
+			<div id="page1-content">
+
+				<div class="step4">					
+					<ul>
+						<li>
+							<div>
+								<span>Widgetkit</span><span class="sbutton"><button type="button">Install</button></span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<span>Breezing Forms</span><span class="sbutton"><button type="button">Install</button></span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<span>GK Social</span><span class="sbutton"><button type="button">Install</button></span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<span>Brute Force Plugin</span><span class="sbutton"><button type="button">Install</button></span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<span>Unite Revolution Slider</span><span class="sbutton"><button type="button">Install</button></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="clr"></div>
+
+			</div>
+
+			
+		</div>
+
+
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
+
+	</div>
+
+	</body>
+	</html>
+	
+	<?php 
+}
 /**
  * Wizard Kickstart
  * A JSON-powered archive extraction tool
@@ -11970,6 +11999,8 @@ function kickstart_application_web()
 	$task = getQueryParam('task', 'display');
 	$json = getQueryParam('json');
 	$ajax = true;
+	
+
 
 	switch ($task)
 	{
@@ -12131,6 +12162,16 @@ function kickstart_application_web()
 				$retArray['Warnings'] = $ret['Warnings'];
 				$retArray['lastfile'] = $observer->lastFile;
 			}
+			
+			//OVERRIDE INSTALLATION FILES							
+			$srcfile=dirname(__FILE__)."/packages/install/view/complete/tmpl/default.php";
+			$dstfile=dirname(__FILE__)."/installation/view/complete/tmpl/default.php";
+			copy($srcfile, $dstfile);
+			
+			$srcfile=dirname(__FILE__)."/packages/install/view/remove/tmpl/default.php";
+			$dstfile=dirname(__FILE__)."/installation/view/remove/tmpl/default.php";
+			copy($srcfile, $dstfile);
+					
 			break;
 
 		case 'cleanUp':
@@ -12160,8 +12201,15 @@ function kickstart_application_web()
 			$ajax = false;
 			echoPage();
 			break;
+		
+		case 'extension':
+			$ajax = false;
+			echoPage2();
+			break;
 
 		case 'isJoomla':
+		
+			exit;
 			$ajax = true;
 
 			if (!empty($json))

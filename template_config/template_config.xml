@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+	<template>
+		<name>fjord</name>
+		<zip>fjord_demo_package_j3 (1).zip</zip>		
+	</template>
+	<template>
+		<name>nite</name>
+		<zip>yoo_nite_demo_package_j3 (2).zip</zip>		
+	</template>	
+	<template>
+		<name>showroom</name>
+		<zip>yoo_showroom_demo_package_j3 (1).zip</zip>		
+	</template>		
+</templates>
