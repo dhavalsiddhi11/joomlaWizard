@@ -41,6 +41,35 @@ else
 	@error_reporting(E_NONE);
 }
 
+$my_path = dirname(__FILE__);
+if( file_exists($my_path."/configuration.php")) {  
+ 	$absolute_path = dirname( $my_path."/configuration.php" );
+     require_once($my_path."/configuration.php");
+   }
+elseif( file_exists($my_path."/configuration.php")){
+     $absolute_path = dirname( $my_path."/configuration.php" );
+     require_once($my_path."/configuration.php");
+   }
+elseif( file_exists($my_path."/configuration.php")){
+       $absolute_path = dirname( $my_path."/configuration.php" );
+        require_once( $my_path."/configuration.php" );
+   }
+   else {
+            die( "Joomla Configuration File not found!" );
+    }
+        
+    $absolute_path = realpath( $absolute_path );
+	define( '_JEXEC', 1 );
+	define( 'JPATH_BASE', $absolute_path );
+	define( 'DS', DIRECTORY_SEPARATOR );
+if (file_exists(dirname(__FILE__) . '/defines.php')) {
+	include_once dirname(__FILE__) . '/defines.php';
+}
+if (!defined('_JDEFINES')) {
+	//define('JPATH_BASE', dirname(__FILE__));
+	require_once JPATH_BASE.'/includes/defines.php';
+}
+
 // ==========================================================================================
 // IIS missing REQUEST_URI workaround
 // ==========================================================================================
@@ -8890,6 +8919,62 @@ function getTemplates()
 		
 		
 }
+function getExtensions()
+{
+		$xml=simplexml_load_file("packages/extensions/extension_config.xml");
+		$data = json_decode(json_encode($xml), TRUE);
+		$extensions=$data['extension'];
+
+		?>
+		<script>
+			$( document ).ready(function() {
+								
+				$(".install-button").click(function() {
+					
+				    var dataurl=$(this).attr('data-url');
+				    $.ajax({
+					  url: "<?php echo JURI::ROOT(); ?>?task=installextension&ename="+dataurl,					 
+					}).done(function() {
+					  $( this ).addClass( "done" );
+					});
+				    alert(dataurl);
+				    				
+				});
+			    
+			   
+			});
+			
+		</script>
+		<div class="clearfix temp-insta">
+		<div class="step4">					
+				<ul>
+						<?php
+							foreach($extensions as $extension)
+							{
+								?>
+								<li>
+									<div  class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name">
+											<?php echo $extension['name']; ?>
+											<button data-url="<?php echo $extension['zip']; ?>" type="button" class="install-button">Install</button>
+										</div>
+									 </div>	
+									</div>
+								</li>
+								
+								<?php
+								//print_r($template);
+							}
+						?>				
+				</ul>
+			</div>
+		
+		</div>
+		<?php
+		
+		
+}
 function callExtraFeature($method = null, array $params = array())
 {
 	static $extraFeatureObjects = null;
@@ -11425,6 +11510,13 @@ function echoPage2()
 	</div>
 
 	<!--<div id="fade" class="black_overlay"></div>-->
+	
+	<script>
+		function installExtension()
+		{
+			
+		}
+	</script>
 
 	<div id="page-container">
 
@@ -11443,35 +11535,7 @@ function echoPage2()
 
 			<div id="page1-content">
 
-				<div class="step4">					
-					<ul>
-						<li>
-							<div>
-								<span>Widgetkit</span><span class="sbutton"><button type="button">Install</button></span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<span>Breezing Forms</span><span class="sbutton"><button type="button">Install</button></span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<span>GK Social</span><span class="sbutton"><button type="button">Install</button></span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<span>Brute Force Plugin</span><span class="sbutton"><button type="button">Install</button></span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<span>Unite Revolution Slider</span><span class="sbutton"><button type="button">Install</button></span>
-							</div>
-						</li>
-					</ul>
-				</div>
+				<?php getExtensions(); ?>
 
 				<div class="clr"></div>
 

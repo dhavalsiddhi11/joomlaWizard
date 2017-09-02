@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extensions>
+	<extension>
+		<name>com_tcpdf_1</name>
+		<zip>com_tcpdf_1.0.4.zip</zip>		
+	</extension>
+	<extension>
+		<name>com_virtuemart</name>
+		<zip>com_virtuemart.3.2.4.zip</zip>		
+	</extension>	
+	<extension>
+		<name>com_virtuemart4_ext_aio</name>
+		<zip>com_virtuemart.3.2.4_ext_aio.zip</zip>		
+	</extension>		
+</extensions>
