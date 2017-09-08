@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<articles>
+	<article>
+		<name>Menu</name>			
+	</article>
+	<article>
+		<name>About</name>			
+	</article>	
+	<article>
+		<name>Gallery</name>	
+	</article>		
+</articles>

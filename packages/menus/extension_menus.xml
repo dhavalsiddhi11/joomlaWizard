@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menus>
+	<menu>
+		<name>Menu</name>			
+	</menu>
+	<menu>
+		<name>Location</name>			
+	</menu>	
+	<menu>
+		<name>Catering</name>			
+	</menu>		
+	<menu>
+		<name>About</name>			
+	</menu>
+	<menu>
+		<name>Contact</name>			
+	</menu>
+	<menu>
+		<name>Gallery</name>			
+	</menu>
+</menus>

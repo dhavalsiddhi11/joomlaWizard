@@ -1,5 +1,9 @@
 
+@import url('https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900');
+
 *{margin: 0px;padding: 0px; box-sizing: border-box;}
+body{font-family: 'Lato', sans-serif;}
+
 .col{float: left !important;}
 .clearfix:after {
     clear: both;
@@ -24,7 +28,58 @@
 .tentry.active{background: #eee;}
 .tentry.active:after{position: absolute; top: 0; right:0; bottom: 0;left:0; height: 100%; background: rgba(0,0,0,0.3); z-index: 1; content: "";}
 .tentry-panel{padding: 10px; background: #ccc; border: 2px solid #999; border-radius:5px;min-height: 160px; }
+#page-container{border: 2px solid #ccc;}
+#header{padding: 10px 35px;border-bottom: 2px solid #ccc; min-height: 60px; background: #d6d6d6; margin-bottom: 0;}
+.title{text-align: left;font-size: 20px; color: #000; }
+.title .circle{margin: 0px; background: #00aeef;width: 35px; height: 35px; text-align: center; line-height: 35px;border: 1px solid #0082b3; font-size: 20px; color: #fff; margin-right: 25px; display: inline-block; vertical-align: middle; }
+.title h2{display: inline-block; vertical-align: middle; border: none; padding: 0; line-height: 35px; background: none;} 
+.panel-contant{padding: 35px; }
+.panel-contant .temp-insta{padding: 20px 70px; background: #f9f9f9;border: 1px solid #dbdbdb; border-radius:3px;  }
+.panel-contant .temp-insta .step4 ul{display: table; width: 100%; background: #fff;}
+.panel-contant .temp-insta .step4 ul li{padding: 25px 45px; border-bottom: 1px solid #e5e5e5; color: #000; list-style-type: none; font-size: 18px; float: left; width: 100%; text-transform: capitalize;}
+.panel-contant .temp-insta .step4 ul li:last-child{border-bottom: none;}
+.panel-contant .temp-insta .step4 ul li .eentry{width: 100%; min-height: 30px;}
+.panel-contant .temp-insta .step4 ul li .mod-title{ float: left; }
+.panel-contant .temp-insta .step4 ul li .prc{display: inline-block;vertical-align: middle;}
+.panel-contant .temp-insta .step4 ul li .prc-btn{float: right;}
+.panel-contant .temp-insta .step4 ul li .prc-btn img{margin-right: 25px;}
+.panel-contant .temp-insta .step4 ul li .install-button{cursor:pointer;
+background: rgb(234,234,234); 
+background: -moz-linear-gradient(top,  rgba(234,234,234,1) 0%, rgba(249,249,249,1) 100%); 
+background: -webkit-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(249,249,249,1) 100%);
+background: linear-gradient(to bottom,  rgba(234,234,234,1) 0%,rgba(249,249,249,1) 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#f9f9f9',GradientType=0 ); 
+padding: 4px 20px; border: 1px solid #dbdbdb; border-radius:5px; color: #5a5959; font-size: 15px; font-family: lato; font-weight: 500; 
+box-shadow: 0px 3px 0px 1px #d1d1d1;-moz-box-shadow: 0px 3px 0px 1px #d1d1d1;-webkit-box-shadow: 0px 3px 0px 1px #d1d1d1;
+transition: all ease 1s 0s;-moz-transition: all ease 0.5s 0s;-webkit-transition: all ease 0.5s 0s;
+}
 
+.panel-contant .temp-insta .step4 ul li .install-button:hover{background: rgb(249,249,249); 
+background: -moz-linear-gradient(top,  rgba(249,249,249,1) 0%, rgba(234,234,234,1) 100%); 
+background: -webkit-linear-gradient(top,  rgba(249,249,249,1) 0%,rgba(234,234,234,1) 100%);
+background: linear-gradient(to bottom,  rgba(249,249,249,1) 0%,rgba(234,234,234,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#eaeaea',GradientType=0 );
+transition: all ease 0.5s 0s;-moz-transition: all ease 0.5s 0s;-webkit-transition: all ease 0.5s 0s;
+}
 
+.nxt-btn{padding: 15px 20px;display: table;width: 100%;}
+.nxt-btn a{cursor:pointer; float:right;
+background: rgb(1,160,219); 
+background: -moz-linear-gradient(top,  rgba(1,160,219,1) 0%, rgba(0,174,239,1) 100%); 
+background: -webkit-linear-gradient(top,  rgba(1,160,219,1) 0%,rgba(0,174,239,1) 100%);
+background: linear-gradient(to bottom,  rgba(1,160,219,1) 0%,rgba(0,174,239,1) 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01a0db', endColorstr='#00aeef',GradientType=0 );  
+padding: 5px 25px; border-radius:5px; color: #5a5959; font-size: 18px; font-family: lato; font-weight: 500; 
+box-shadow: 0px 3px 0px 1px #d9d9d9;-moz-box-shadow: 0px 3px 0px 1px #d9d9d9;-webkit-box-shadow: 0px 3px 0px 1px #d9d9d9;
+transition: all ease 1s 0s;-moz-transition: all ease 0.5s 0s;-webkit-transition: all ease 0.5s 0s; }
+.nxt-btn a button.install-button{border: none; background: none; font-size: 18px; color: #fff; cursor: pointer;}
 
+.nxt-btn a:hover{background: rgb(0,174,239); 
+background: -moz-linear-gradient(top,  rgba(0,174,239,1) 0%, rgba(1,160,219,1) 100%); 
+background: -webkit-linear-gradient(top,  rgba(0,174,239,1) 0%,rgba(1,160,219,1) 100%);
+background: linear-gradient(to bottom,  rgba(0,174,239,1) 0%,rgba(1,160,219,1) 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00aeef', endColorstr='#01a0db',GradientType=0 );
+}
+
+.css-form textarea{width: 100%;min-height: 150px;max-width: 100%;min-width: 100%;}
 

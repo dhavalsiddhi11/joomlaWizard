@@ -40,8 +40,10 @@ else
 {
 	@error_reporting(E_NONE);
 }
-
 $my_path = dirname(__FILE__);
+if(file_exists($my_path."/configuration.php"))
+{
+	$my_path = dirname(__FILE__);
 if( file_exists($my_path."/configuration.php")) {  
  	$absolute_path = dirname( $my_path."/configuration.php" );
      require_once($my_path."/configuration.php");
@@ -70,6 +72,15 @@ if (!defined('_JDEFINES')) {
 	require_once JPATH_BASE.'/includes/defines.php';
 }
 
+require_once JPATH_BASE.'/includes/framework.php';
+//require_once(dirname(__FILE__).DS.'helper.php');
+
+JDEBUG ? $_PROFILER->mark('afterLoad') : null;
+$app = JFactory::getApplication('site');
+$app->initialise();
+}
+
+		
 // ==========================================================================================
 // IIS missing REQUEST_URI workaround
 // ==========================================================================================
@@ -8919,6 +8930,139 @@ function getTemplates()
 		
 		
 }
+function getMenus()
+{
+		$xml=simplexml_load_file("packages/menus/extension_menus.xml");
+		$data = json_decode(json_encode($xml), TRUE);
+		$extensions=$data['menu'];
+
+		?>
+		<script>
+			$( document ).ready(function() {
+								
+				$(".install-button").click(function() {
+					var idd=this.id;
+				    var dataurl=$(this).attr('data-url');
+				    $.ajax({
+					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					    beforeSend: function() {	
+					    				    											
+							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
+						}					 
+					}).done(function() {
+						$('#process'+idd).html('');	
+						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
+					});
+				   
+				});
+			    
+			   
+			});
+			
+		</script>
+		
+		<div class="clearfix temp-insta">
+		<div class="step4">					
+				<ul>
+						<?php
+							$i=0;
+							foreach($extensions as $extension)
+							{
+								?>
+								<li>
+									<div  class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title"><?php echo $extension['name']; ?></span>
+											<span id="process<?php echo $i; ?>" class="prc"></span>
+											<span id="bt<?php echo $i; ?>" class="prc-btn">
+												<button data-url="" type="button" id="<?php echo $i; ?>" class="install-button">Add</button>
+											</span>
+											
+										</div>
+									 </div>	
+									</div>
+								</li>
+								
+								<?php
+								$i++;								
+							}
+						?>				
+				</ul>
+			</div>
+		
+		</div>
+		<?php
+		
+		
+}
+function getArticles()
+{
+	
+		$xml=simplexml_load_file("packages/articles/extension_articles.xml");
+		$data = json_decode(json_encode($xml), TRUE);
+		$extensions=$data['article'];
+
+		?>
+		<script>
+			$( document ).ready(function() {
+								
+				$(".install-button").click(function() {
+					var idd=this.id;
+				    var dataurl=$(this).attr('data-url');
+				    $.ajax({
+					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					    beforeSend: function() {	
+					    				    											
+							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
+						}					 
+					}).done(function() {
+						$('#process'+idd).html('');	
+						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
+					});
+				   
+				});
+			    
+			   
+			});
+			
+		</script>
+		
+		<div class="clearfix temp-insta">
+		<div class="step4">					
+				<ul>
+						<?php
+							$i=0;
+							foreach($extensions as $extension)
+							{
+								?>
+								<li>
+									<div  class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title"><?php echo $extension['name']; ?></span>
+											<span id="process<?php echo $i; ?>" class="prc"></span>
+											<span id="bt<?php echo $i; ?>" class="prc-btn">
+												<button data-url="" type="button" id="<?php echo $i; ?>" class="install-button">Add</button>
+											</span>
+											
+										</div>
+									 </div>	
+									</div>
+								</li>
+								
+								<?php
+								$i++;								
+							}
+						?>				
+				</ul>
+			</div>
+		
+		</div>
+		<?php
+		
+	
+}
 function getExtensions()
 {
 		$xml=simplexml_load_file("packages/extensions/extension_config.xml");
@@ -8930,41 +9074,51 @@ function getExtensions()
 			$( document ).ready(function() {
 								
 				$(".install-button").click(function() {
-					
+					var idd=this.id;
 				    var dataurl=$(this).attr('data-url');
 				    $.ajax({
-					  url: "<?php echo JURI::ROOT(); ?>?task=installextension&ename="+dataurl,					 
+					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					    beforeSend: function() {	
+					    				    											
+							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
+						}					 
 					}).done(function() {
-					  $( this ).addClass( "done" );
+						$('#process'+idd).html('');	
+						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
 					});
-				    alert(dataurl);
-				    				
+				   
 				});
 			    
 			   
 			});
 			
 		</script>
+		
 		<div class="clearfix temp-insta">
 		<div class="step4">					
 				<ul>
 						<?php
+							$i=0;
 							foreach($extensions as $extension)
 							{
 								?>
 								<li>
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
-										<div class="name">
-											<?php echo $extension['name']; ?>
-											<button data-url="<?php echo $extension['zip']; ?>" type="button" class="install-button">Install</button>
+										<div class="name center">
+											<span class="mod-title"><?php echo $extension['name']; ?></span>
+											<span id="process<?php echo $i; ?>" class="prc"></span>
+											<span id="bt<?php echo $i; ?>" class="prc-btn">
+												<button data-url="<?php echo $extension['zip']; ?>" type="button" id="<?php echo $i; ?>" class="install-button">Install</button>
+											</span>
+											
 										</div>
 									 </div>	
 									</div>
 								</li>
 								
 								<?php
-								//print_r($template);
+								$i++;								
 							}
 						?>				
 				</ul>
@@ -11525,7 +11679,7 @@ function echoPage2()
 		</div>
 
 		<div id="header">
-			<div class="title"><div class="circle">6</div>Extension Installer</div>
+			<div class="title"><div class="circle">6</div><h2>Extension Installer</h2></div>
 		</div>
 
 		
@@ -11533,18 +11687,457 @@ function echoPage2()
 		<div id="page1">
 			<?php callExtraFeature('onPage1'); ?>
 
-			<div id="page1-content">
+			<div id="page1-content" class="panel-contant">
 
 				<?php getExtensions(); ?>
+				
+				
 
 				<div class="clr"></div>
-
+				
+				<div class="nxt-btn">
+					<a href="wizard.php?task=article">
+						<button class="install-button">Next</button>
+					</a>				
+				</div>
 			</div>
 
 			
 		</div>
+		
+		
+		
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
 
+	</div>
 
+	</body>
+	</html>
+	
+	<?php 
+}
+function echoPage3()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
+
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>
+
+	<!--<div id="fade" class="black_overlay"></div>-->
+	
+	<script>
+		function installExtension()
+		{
+			
+		}
+	</script>
+
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>
+
+		<div id="header">
+			<div class="title"><div class="circle">7</div><h2>Create Article</h2></div>
+		</div>
+
+		
+
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+
+			<div id="page1-content" class="panel-contant">
+
+				<?php getArticles(); ?>
+				
+				
+
+				<div class="clr"></div>
+				<div class="nxt-btn">
+					<a href="wizard.php?task=menu">
+						<button class="install-button">Next</button>
+					</a>				
+				</div>
+			</div>
+
+			
+		</div>
+		
+		
+		
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
+
+	</div>
+
+	</body>
+	</html>
+	
+	<?php 
+}
+function echoPage4()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
+
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>
+
+	<!--<div id="fade" class="black_overlay"></div>-->
+	
+	<script>
+		function installExtension()
+		{
+			
+		}
+	</script>
+
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>
+
+		<div id="header">
+			<div class="title"><div class="circle">8</div><h2>Create Menu</h2></div>
+		</div>
+
+		
+
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+
+			<div id="page1-content" class="panel-contant">
+
+				<?php getMenus(); ?>
+				
+				
+
+				<div class="clr"></div>
+				
+				<div class="nxt-btn">
+					<a href="wizard.php?task=images">
+						<button class="install-button">Next</button>
+					</a>				
+				</div>
+			</div>
+
+			
+		</div>
+		
+		
+		
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
+
+	</div>
+
+	</body>
+	</html>
+	
+	<?php 
+}
+function echoPage5()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
+
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>
+
+	<!--<div id="fade" class="black_overlay"></div>-->
+	
+	<script>
+		function installExtension()
+		{
+			
+		}
+	</script>
+
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>
+
+		<div id="header">
+			<div class="title"><div class="circle">9</div><h2>Add Images</h2></div>
+		</div>	
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+
+			<div id="page1-content" class="panel-contant">
+
+				<div class="clearfix temp-insta">
+					<div class="step4">					
+							<ul>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title">Logo</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">
+												<button data-url="" type="button" id="0" class="install-button">Upload</button>
+											</span>											
+										</div>
+									 </div>	
+									</div>
+								</li>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title">To the gallery</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">
+												<button data-url="" type="button" id="0" class="install-button">Upload</button>
+											</span>											
+										</div>
+									 </div>	
+									</div>
+								</li>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title">To the homepage slideshow</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">
+												<button data-url="" type="button" id="0" class="install-button">Upload</button>
+											</span>											
+										</div>
+									 </div>	
+									</div>
+								</li>																																																																
+							</ul>
+						</div>
+					
+					</div>
+				
+				
+
+				<div class="clr"></div>
+				
+				<div class="nxt-btn">
+					<a href="wizard.php?task=css">
+						<button class="install-button">Next</button>
+					</a>				
+				</div>
+			</div>
+
+			
+		</div>
+		
+		
+		
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
+
+	</div>
+
+	</body>
+	</html>
+	
+	<?php 
+}
+function echoPage6()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
+
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>
+
+	<!--<div id="fade" class="black_overlay"></div>-->
+	
+	<script>
+		function installExtension()
+		{
+			
+		}
+	</script>
+
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>
+		
+		
+
+		<div id="header">
+			<div class="title"><div class="circle">10</div><h2>CSS</h2></div>
+		</div>
+
+		
+
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+
+			<div id="page1-content" class="panel-contant">
+				
+				<form class="css-form">
+					<textarea></textarea>
+				</form>
+				
+				<div class="clr"></div>
+				
+				<div class="nxt-btn">
+					<a href="wizard.php?task=css">
+						<button class="install-button">Save & Finish</button>
+					</a>				
+				</div>
+			</div>
+
+			
+		</div>
+		
+		
+		
 		<div id="footer">
 			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
 		</div>
@@ -12270,7 +12863,129 @@ function kickstart_application_web()
 			$ajax = false;
 			echoPage2();
 			break;
+		case 'article':
+			$ajax = false;
+			echoPage3();
+			break;
+		case 'menu':
+			$ajax = false;
+			echoPage4();
+			break;
+		case 'images':
+			$ajax = false;
+			echoPage5();
+			break;
+		case 'css':
+			$ajax = false;
+			echoPage6();
+			break;
+		
+		case 'installextension':
+			
+			$file = JRequest::getVar('ename'); 
+			
+			$srcfile=dirname(__FILE__)."/packages/extensions/".$file;
+			$dstfile=dirname(__FILE__)."/tmp/".$file;
+			copy($srcfile, $dstfile);
+			
+			JPluginHelper::importPlugin('installer');
+			$dispatcher = JEventDispatcher::getInstance();
 
+			JRequest::setVar('install_url', JURI::ROOT().'tmp/'.$file);
+			JRequest::setVar('installtype', 'url');
+			
+			$req=JRequest::get('request');
+			
+			JClientHelper::setCredentialsFromRequest('ftp');
+			$app = JFactory::getApplication();
+	
+			// Load installer plugins for assistance if required:
+			JPluginHelper::importPlugin('installer');
+			$dispatcher = JEventDispatcher::getInstance();
+	
+			$package = null;
+	
+			$results = $dispatcher->trigger('onInstallerBeforeInstallation', array(@$this, &$package));
+	
+			$installType = $app->input->getWord('installtype');
+	
+			if ($package === null)
+			{
+				switch ($installType)
+				{					
+					case 'url':
+						$package = getPackageFromUrl();
+						break;					
+				}
+			}									
+			// This event allows a custom installation of the package or a customization of the package:
+			$results = $dispatcher->trigger('onInstallerBeforeInstaller', array(@$this, &$package));
+	
+			if (in_array(true, $results, true))
+			{
+				return true;
+			}
+			elseif (in_array(false, $results, true))
+			{
+				if (in_array($installType, array('upload', 'url')))
+				{
+					JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
+				}
+	
+				return false;
+			}
+	
+			if (!$package || !$package['type'])
+			{
+				if (in_array($installType, array('upload', 'url')))
+				{
+					JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
+				}
+	
+				$app->enqueueMessage(JText::_('COM_INSTALLER_UNABLE_TO_FIND_INSTALL_PACKAGE'), 'error');
+	
+				return false;
+			}
+			
+			
+			// Get an installer instance.
+			$installer = JInstaller::getInstance();
+			
+			$res=array();
+			// Install the package.
+			if (!$installer->install($package['dir']))
+			{
+				// There was an error installing the package.
+				$msg = JText::sprintf('COM_INSTALLER_INSTALL_ERROR', JText::_('COM_INSTALLER_TYPE_TYPE_' . strtoupper($package['type'])));
+				$result = false;
+				$msgType = 'error';
+				
+			}
+			else
+			{
+				// Package installed sucessfully.
+				$msg = JText::sprintf('COM_INSTALLER_INSTALL_SUCCESS', JText::_('COM_INSTALLER_TYPE_TYPE_' . strtoupper($package['type'])));
+				$result = true;
+				$msgType = 'message';
+			}
+			
+			$res['result']=$result;
+			$res['type']=$msgType;
+			$res['msg']=$msg;
+			// Cleanup the install files.
+			if (!is_file($package['packagefile']))
+			{
+				$config = JFactory::getConfig();
+				$package['packagefile'] = $config->get('tmp_path') . '/' . $package['packagefile'];
+			}
+	
+			JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
+		
+			echo json_encode($res);
+			exit;
+			
+			
+			break;
 		case 'isJoomla':
 		
 			exit;
@@ -12373,7 +13088,56 @@ function kickstart_application_web()
 		echo "###$json###";
 	}
 }
+function getPackageFromUrl()
+	{
+		$input = JFactory::getApplication()->input;
 
+		// Get the URL of the package to install.
+		$url = $input->getString('install_url');
+
+		// Did you give us a URL?
+		if (!$url)
+		{
+			JError::raiseWarning('', JText::_('COM_INSTALLER_MSG_INSTALL_ENTER_A_URL'));
+
+			return false;
+		}
+
+		// Handle updater XML file case:
+		if (preg_match('/\.xml\s*$/', $url))
+		{
+			jimport('joomla.updater.update');
+			$update = new JUpdate;
+			$update->loadFromXML($url);
+			$package_url = trim($update->get('downloadurl', false)->_data);
+
+			if ($package_url)
+			{
+				$url = $package_url;
+			}
+
+			unset($update);
+		}
+
+		// Download the package at the URL given.
+		$p_file = JInstallerHelper::downloadPackage($url);
+
+		// Was the package downloaded?
+		if (!$p_file)
+		{
+			JError::raiseWarning('', JText::_('COM_INSTALLER_MSG_INSTALL_INVALID_URL'));
+
+			return false;
+		}
+
+		$config   = JFactory::getConfig();
+		$tmp_dest = $config->get('tmp_path');
+
+		// Unpack the downloaded package file.
+		$package = JInstallerHelper::unpack($tmp_dest . '/' . $p_file, true);
+
+		return $package;
+	}
 /**
  * Wizard Kickstart
  * A JSON-powered archive extraction tool
