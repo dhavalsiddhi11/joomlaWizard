@@ -8937,21 +8937,27 @@ function getMenus()
 		$extensions=$data['menu'];
 
 		?>
+		
 		<script>
 			$( document ).ready(function() {
 								
 				$(".install-button").click(function() {
 					var idd=this.id;
-				    var dataurl=$(this).attr('data-url');
+				    var dataurl=$(this).attr('data-title');
+				    
 				    $.ajax({
-					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installmenu&ename="+dataurl,
 					    beforeSend: function() {	
 					    				    											
 							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
 						}					 
-					}).done(function() {
+					}).done(function(e) {
+						var jsonConvertedData = $.parseJSON(e);  // Convert to json
+						//alert(jsonConvertedData.result);
 						$('#process'+idd).html('');	
-						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
+						$('#link'+idd).attr('href','<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_menus&view=item&client_id=0&layout=edit&id='+jsonConvertedData.result);
+						$('#link'+idd).css('display','inline-block');
+						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');							    
 					});
 				   
 				});
@@ -8973,10 +8979,11 @@ function getMenus()
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
+											<a style="display: none;" id="link<?php echo $i; ?>" class="modal btn-gray" href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
 											<span class="mod-title"><?php echo $extension['name']; ?></span>
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
-												<button data-url="" type="button" id="<?php echo $i; ?>" class="install-button">Add</button>
+												<button data-title="<?php echo $extension['name']; ?>" type="button" id="<?php echo $i; ?>" class="install-button">Add</button>
 											</span>
 											
 										</div>
@@ -9006,18 +9013,31 @@ function getArticles()
 		?>
 		<script>
 			$( document ).ready(function() {
-								
+				
+				//add-article
+				$(".install-button").click(function() {
+					
+					
+					
+				});
+				
 				$(".install-button").click(function() {
 					var idd=this.id;
-				    var dataurl=$(this).attr('data-url');
+				    var dataurl=$(this).attr('data-title');
+				    
 				    $.ajax({
-					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installarticle&ename="+dataurl,
 					    beforeSend: function() {	
 					    				    											
 							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
 						}					 
-					}).done(function() {
+					}).done(function(e) {
+						
+						var jsonConvertedData = $.parseJSON(e);  // Convert to json
+						//alert(jsonConvertedData.result);
 						$('#process'+idd).html('');	
+						$('#link'+idd).attr('href','<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&task=article.edit&id='+jsonConvertedData.result);
+						$('#link'+idd).css('display','inline-block');
 						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
 					});
 				   
@@ -9040,10 +9060,11 @@ function getArticles()
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
+											<a style="display: none;" id="link<?php echo $i; ?>" class="modal btn-gray" href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
 											<span class="mod-title"><?php echo $extension['name']; ?></span>
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
-												<button data-url="" type="button" id="<?php echo $i; ?>" class="install-button">Add</button>
+												<button type="button" id="<?php echo $i; ?>" data-title="<?php echo $extension['name']; ?>"  class="install-button add-article">Add</button>
 											</span>
 											
 										</div>
@@ -11753,6 +11774,58 @@ function echoPage3()
 		<?php echoHeadJavascript(); ?>
 		
 		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+		
+		<link   href="<?php echo JURI::BASE(); ?>media/system/css/modal.css?<?php echo rand(999,9999); ?>" rel="stylesheet" type="text/css" />				
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-noconflict.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-migrate.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/bootstrap.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-more.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/modal.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>templates/yootheme/vendor/assets/uikit/dist/js/uikit-icons.min.js?v=1.6.5" type="text/javascript"></script>
+		<script type="text/javascript">
+	
+			jQuery(function($) {
+				SqueezeBox.initialize({});
+				SqueezeBox.assign($('a.modal').get(), {
+					parse: 'rel'
+				});
+			});
+	
+			window.jModalClose = function () {
+				SqueezeBox.close();
+			};
+			
+			// Add extra modal close functionality for tinyMCE-based editors
+			document.onreadystatechange = function () {
+				if (document.readyState == 'interactive' && typeof tinyMCE != 'undefined' && tinyMCE)
+				{
+					if (typeof window.jModalClose_no_tinyMCE === 'undefined')
+					{	
+						window.jModalClose_no_tinyMCE = typeof(jModalClose) == 'function'  ?  jModalClose  :  false;
+						
+						jModalClose = function () {
+							if (window.jModalClose_no_tinyMCE) window.jModalClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+			
+					if (typeof window.SqueezeBoxClose_no_tinyMCE === 'undefined')
+					{
+						if (typeof(SqueezeBox) == 'undefined')  SqueezeBox = {};
+						window.SqueezeBoxClose_no_tinyMCE = typeof(SqueezeBox.close) == 'function'  ?  SqueezeBox.close  :  false;
+			
+						SqueezeBox.close = function () {
+							if (window.SqueezeBoxClose_no_tinyMCE)  window.SqueezeBoxClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+				}
+			};
+			
+		</script>
 	</head>
 	<body>
 
@@ -11767,6 +11840,7 @@ function echoPage3()
 		{
 			
 		}
+		
 	</script>
 
 	<div id="page-container">
@@ -11779,16 +11853,16 @@ function echoPage3()
 			<div class="title"><div class="circle">7</div><h2>Create Article</h2></div>
 		</div>
 
-		
-
+		<?php	
+		 JHTML::_('behavior.modal'); 		
+		?>
+			
 		<div id="page1">
 			<?php callExtraFeature('onPage1'); ?>
 
 			<div id="page1-content" class="panel-contant">
 
 				<?php getArticles(); ?>
-				
-				
 
 				<div class="clr"></div>
 				<div class="nxt-btn">
@@ -11849,6 +11923,60 @@ function echoPage4()
 		<?php echoHeadJavascript(); ?>
 		
 		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+		
+		<link   href="<?php echo JURI::BASE(); ?>media/system/css/modal.css?<?php echo rand(999,9999); ?>" rel="stylesheet" type="text/css" />				
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-noconflict.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-migrate.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/bootstrap.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-more.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/modal.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>templates/yootheme/vendor/assets/uikit/dist/js/uikit-icons.min.js?v=1.6.5" type="text/javascript"></script>
+		<script type="text/javascript">
+	
+			jQuery(function($) {
+				SqueezeBox.initialize({});
+				SqueezeBox.assign($('a.modal').get(), {
+					parse: 'rel'
+				});
+			});
+	
+			window.jModalClose = function () {
+				SqueezeBox.close();
+			};
+			
+			// Add extra modal close functionality for tinyMCE-based editors
+			document.onreadystatechange = function () {
+				if (document.readyState == 'interactive' && typeof tinyMCE != 'undefined' && tinyMCE)
+				{
+					if (typeof window.jModalClose_no_tinyMCE === 'undefined')
+					{	
+						window.jModalClose_no_tinyMCE = typeof(jModalClose) == 'function'  ?  jModalClose  :  false;
+						
+						jModalClose = function () {
+							if (window.jModalClose_no_tinyMCE) window.jModalClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+			
+					if (typeof window.SqueezeBoxClose_no_tinyMCE === 'undefined')
+					{
+						if (typeof(SqueezeBox) == 'undefined')  SqueezeBox = {};
+						window.SqueezeBoxClose_no_tinyMCE = typeof(SqueezeBox.close) == 'function'  ?  SqueezeBox.close  :  false;
+			
+						SqueezeBox.close = function () {
+							if (window.SqueezeBoxClose_no_tinyMCE)  window.SqueezeBoxClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+				}
+			};
+			
+		</script>
 	</head>
 	<body>
 
@@ -11856,15 +11984,10 @@ function echoPage4()
 		AUTOMODEON
 	</div>
 
-	<!--<div id="fade" class="black_overlay"></div>-->
 	
-	<script>
-		function installExtension()
-		{
-			
-		}
-	</script>
-
+	<?php	
+		 JHTML::_('behavior.modal'); 		
+	?>
 	<div id="page-container">
 
 		<div id="genericerror" class="white_content">
@@ -12087,53 +12210,47 @@ function echoPage6()
 		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
 	</head>
 	<body>
-
 	<div id="automode" style="display:none;">
 		AUTOMODEON
-	</div>
-
-	<!--<div id="fade" class="black_overlay"></div>-->
-	
-	<script>
-		function installExtension()
+	</div>	
+	<?php
+		$base=JPATH_BASE.'/templates/yootheme/css';
+		
+		if(isset($_REQUEST['saveit']))
 		{
-			
+			$request=JRequest::get('request');
+			$myfile = fopen($base."/custom.css", "w") or die("Unable to open file!");
+			$txt = $request['css'];
+			fwrite($myfile, $txt);			
+			fclose($myfile);			
 		}
-	</script>
-
+				
+		$myfile = fopen($base."/custom.css", "r") or die("Unable to open file!");
+		$datas=fread($myfile,filesize($base."/custom.css"));
+		fclose($myfile);		
+	?>
 	<div id="page-container">
 
 		<div id="genericerror" class="white_content">
 			<pre id="genericerrorInner"></pre>
-		</div>
-		
-		
-
+		</div>				
 		<div id="header">
 			<div class="title"><div class="circle">10</div><h2>CSS</h2></div>
-		</div>
-
-		
-
+		</div>	
 		<div id="page1">
 			<?php callExtraFeature('onPage1'); ?>
-
-			<div id="page1-content" class="panel-contant">
-				
-				<form class="css-form">
-					<textarea></textarea>
-				</form>
-				
-				<div class="clr"></div>
-				
-				<div class="nxt-btn">
-					<a href="wizard.php?task=css">
-						<button class="install-button">Save & Finish</button>
-					</a>				
-				</div>
-			</div>
-
-			
+			<div id="page1-content" class="panel-contant">				
+				<form class="css-form" action="wizard.php?task=css" method="post" >
+					<textarea name="css"><?php echo $datas; ?></textarea>
+					<input type="hidden" name="saveit" id="saveit" />
+					<div class="clr"></div>				
+					<div class="nxt-btn">
+						<a href="wizard.php?task=css">
+							<button class="install-button">Save & Finish</button>
+						</a>				
+					</div>
+				</form>							
+			</div>		
 		</div>
 		
 		
@@ -12879,7 +12996,123 @@ function kickstart_application_web()
 			$ajax = false;
 			echoPage6();
 			break;
+		case 'installmenu':
+			 
+			 $ename=JRequest::getVar('ename');
+			 			 
+			 $db =JFactory::getDBO();
+
+			 $sql = "SELECT * FROM #__menu WHERE `title` = '".$ename."'";
+			 $db->setQuery($sql);
+			 $fullArticle = $db->loadObject();
+			 
+			 $res=array();
+			 
+			 if(@$fullArticle->id)
+			 {
+			 	$res['result']=$fullArticle->id;
+				echo json_encode($res);
+				exit;
+			 }
+			
+			 $ename=JRequest::getVar('ename');
+			
+			 $menuTable = JTable::getInstance('Menu', 'JTable', array());
+
+	            $menuData = array(
+		            'menutype' => 'mainmenu',
+		            'title' => $ename,
+		            'type' => 'component',
+		            'component_id' => 22,                  
+		            'link' => '#',
+		            'language' => '*',
+		            'published' => 1,
+		            'parent_id' => '1',
+		            'level' => 1,
+	        	);
+	
+	        // Bind data
+	        if (!$menuTable->bind($menuData))
+	        {
+	            //$this->setError($menuTable->getError());
+	            //return false;
+	        }
+	
+	        // Check the data.
+	        if (!$menuTable->check())
+	        {
+	            //$this->setError($menuTable->getError());
+	            //return false;
+	        }
+	
+	        // Store the data.
+	        if (!$menuTable->store())
+	        {
+	            //$this->setError($menuTable->getError());
+	            //return false;
+	        }
+			
+			
+			$res['result']=$menuTable->id;
+			echo json_encode($res);
+			exit;					
+			break;
+		case 'installarticle':
+			
+			$ename=JRequest::getVar('ename');
 		
+			$table = JTable::getInstance('Content', 'JTable', array());
+			
+			$db =JFactory::getDBO();
+
+			$sql = "SELECT * FROM #__content WHERE `title` = '".$ename."'";
+			$db->setQuery($sql);
+			$fullArticle = $db->loadObject();
+			
+			$res=array();
+			
+			if(@$fullArticle->id)
+			{
+				$res['result']=$fullArticle->id;
+				echo json_encode($res);
+				exit;
+				break;
+			}	
+			
+			
+
+			$data = array(
+			    'catid' => 1,
+			    'title' => $ename,
+			    'introtext' => $ename,
+			    'fulltext' => $ename,
+			    'language' => 'en-GB',
+			    'state' => 1,
+			);
+			
+			// Bind data
+			if (!$table->bind($data))
+			{			 
+			    return false;
+			}
+			
+			// Check the data.
+			if (!$table->check())
+			{			 
+			    return false;
+			}
+			
+			// Store the data.
+			if (!$table->store())
+			{			
+			    return false;
+			}
+			
+			$res['result']=$table->id;
+			echo json_encode($res);
+			exit;
+			
+			break;
 		case 'installextension':
 			
 			$file = JRequest::getVar('ename'); 
