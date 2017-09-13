@@ -9131,10 +9131,9 @@ function getExtensions()
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
 												<button data-url="<?php echo $extension['zip']; ?>" type="button" id="<?php echo $i; ?>" class="install-button">Install</button>
-											</span>
-											
+											</span>											
 										</div>
-									 </div>	
+									 	</div>	
 									</div>
 								</li>
 								
@@ -11861,26 +11860,19 @@ function echoPage3()
 			<?php callExtraFeature('onPage1'); ?>
 
 			<div id="page1-content" class="panel-contant">
-
 				<?php getArticles(); ?>
-
 				<div class="clr"></div>
 				<div class="nxt-btn">
 					<a href="wizard.php?task=menu">
 						<button class="install-button">Next</button>
 					</a>				
 				</div>
-			</div>
-
-			
-		</div>
-		
-		
+			</div>			
+		</div>	
 		
 		<div id="footer">
 			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
 		</div>
-
 	</div>
 
 	</body>
@@ -12019,14 +12011,11 @@ function echoPage4()
 			</div>
 
 			
-		</div>
-		
-		
+		</div>		
 		
 		<div id="footer">
 			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
 		</div>
-
 	</div>
 
 	</body>
@@ -12098,19 +12087,24 @@ function echoPage5()
 			<?php callExtraFeature('onPage1'); ?>
 
 			<div id="page1-content" class="panel-contant">
-
-				<div class="clearfix temp-insta">
+			<?php
+			if (strpos($template->template, 'yoo_') !== false) 
+			{
+			   ?>
+			   <div class="clearfix temp-insta">
 					<div class="step4">					
 							<ul>
 								<li>
 									<div class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
+																
 											<span class="mod-title">Logo</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<button data-url="" type="button" id="0" class="install-button">Upload</button>
-											</span>											
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=logo" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<!-- <button data-url="" type="button" id="0" class="install-button" onclick="location.href='http://192.168.1.63/wizard/administrator/index.php?p=customizer&option=com_ajax&style=9&return=http%3A%2F%2F192.168.1.63%2Fwizard%2Fadministrator%2Findex.php%3Foption%3Dcom_templates%26view%3Dstyle%26layout%3Dedit%26id%3D9&site=%2Fwizard%2Findex.php' rel='{handle r: 'iframe', size: {x: 600, y: 450}}';">Upload</button>-->												
+											</span>																
 										</div>
 									 </div>	
 									</div>
@@ -12122,7 +12116,58 @@ function echoPage5()
 											<span class="mod-title">To the gallery</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<button data-url="" type="button" id="0" class="install-button">Upload</button>
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=article&layout=edit&id=<?php echo $article->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+											</span>											
+										</div>
+									 </div>	
+									</div>
+								</li>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title">To the homepage slideshow</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">												
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=slideshow" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+											</span>											
+										</div>
+									 </div>	
+									</div>
+								</li>																																																																
+							</ul>
+						</div>					
+					</div>
+			   <?php
+			}		
+			else {
+				?>
+				<div class="clearfix temp-insta">
+					<div class="step4">					
+							<ul>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+																
+											<span class="mod-title">Logo</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<!-- <button data-url="" type="button" id="0" class="install-button" onclick="location.href='http://192.168.1.63/wizard/administrator/index.php?p=customizer&option=com_ajax&style=9&return=http%3A%2F%2F192.168.1.63%2Fwizard%2Fadministrator%2Findex.php%3Foption%3Dcom_templates%26view%3Dstyle%26layout%3Dedit%26id%3D9&site=%2Fwizard%2Findex.php' rel='{handle r: 'iframe', size: {x: 600, y: 450}}';">Upload</button>-->												
+											</span>																
+										</div>
+									 </div>	
+									</div>
+								</li>
+								<li>
+									<div class="col eentry">
+									  <div class="eentry-panel">						
+										<div class="name center">
+											<span class="mod-title">To the gallery</span>
+											<span id="process0" class="prc"></span>
+											<span id="bt0" class="prc-btn">
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=article&layout=edit&id=<?php echo $article->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
@@ -12142,30 +12187,82 @@ function echoPage5()
 									</div>
 								</li>																																																																
 							</ul>
-						</div>
-					
+						</div>					
 					</div>
-				
-				
+			<?php
+			}		
+			?>
 
-				<div class="clr"></div>
+			
+
 				
+				
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+		
+		<link   href="<?php echo JURI::BASE(); ?>media/system/css/modal.css?<?php echo rand(999,9999); ?>" rel="stylesheet" type="text/css" />				
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-noconflict.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-migrate.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/bootstrap.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-more.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/modal.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>templates/yootheme/vendor/assets/uikit/dist/js/uikit-icons.min.js?v=1.6.5" type="text/javascript"></script>
+		<script type="text/javascript">
+			
+			jQuery(function($) {
+				SqueezeBox.initialize({});
+				SqueezeBox.assign($('a.modal').get(), {
+					parse: 'rel'
+				});
+			});
+	
+			window.jModalClose = function () {
+				SqueezeBox.close();
+			};
+			
+			// Add extra modal close functionality for tinyMCE-based editors
+			document.onreadystatechange = function () {
+				if (document.readyState == 'interactive' && typeof tinyMCE != 'undefined' && tinyMCE)
+				{
+					if (typeof window.jModalClose_no_tinyMCE === 'undefined')
+					{	
+						window.jModalClose_no_tinyMCE = typeof(jModalClose) == 'function'  ?  jModalClose  :  false;
+						
+						jModalClose = function () {
+							if (window.jModalClose_no_tinyMCE) window.jModalClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+			
+					if (typeof window.SqueezeBoxClose_no_tinyMCE === 'undefined')
+					{
+						if (typeof(SqueezeBox) == 'undefined')  SqueezeBox = {};
+						window.SqueezeBoxClose_no_tinyMCE = typeof(SqueezeBox.close) == 'function'  ?  SqueezeBox.close  :  false;
+			
+						SqueezeBox.close = function () {
+							if (window.SqueezeBoxClose_no_tinyMCE)  window.SqueezeBoxClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+				}
+			};
+			
+		</script>
+				<div class="clr"></div>				
 				<div class="nxt-btn">
 					<a href="wizard.php?task=css">
 						<button class="install-button">Next</button>
 					</a>				
 				</div>
-			</div>
-
-			
-		</div>
-		
-		
+			</div>			
+		</div>		
 		
 		<div id="footer">
 			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
 		</div>
-
 	</div>
 
 	</body>
@@ -13086,7 +13183,7 @@ function kickstart_application_web()
 			    'title' => $ename,
 			    'introtext' => $ename,
 			    'fulltext' => $ename,
-			    'language' => 'en-GB',
+			    'language' => '*',
 			    'state' => 1,
 			);
 			
