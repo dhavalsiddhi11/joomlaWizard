@@ -11854,8 +11854,7 @@ function echoPage3()
 
 		<?php	
 		 JHTML::_('behavior.modal'); 		
-		?>
-			
+		?>			
 		<div id="page1">
 			<?php callExtraFeature('onPage1'); ?>
 
@@ -12084,11 +12083,24 @@ function echoPage5()
 			<div class="title"><div class="circle">9</div><h2>Add Images</h2></div>
 		</div>	
 		<div id="page1">
-			<?php callExtraFeature('onPage1'); ?>
-
+			<?php callExtraFeature('onPage1'); ?>			
+			<?php			
+			$db =JFactory::getDBO();
+		    $sql = "SELECT * FROM #__template_styles WHERE `home` = 1 AND `client_id`!=1";
+		    $db->setQuery($sql);
+		    $template = $db->loadObject();	
+			
+			
+			
+			$db =JFactory::getDBO();
+		    $sql = "SELECT * FROM #__content WHERE `title` = 'Gallery'";
+		    $db->setQuery($sql);
+		    $article = $db->loadObject();
+								
+			?>
 			<div id="page1-content" class="panel-contant">
 			<?php
-			if (strpos($template->template, 'yoo_') !== false) 
+			if (strpos($template->template, 'yoo_')!== false) 
 			{
 			   ?>
 			   <div class="clearfix temp-insta">
@@ -12153,8 +12165,7 @@ function echoPage5()
 											<span class="mod-title">Logo</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
-												<!-- <button data-url="" type="button" id="0" class="install-button" onclick="location.href='http://192.168.1.63/wizard/administrator/index.php?p=customizer&option=com_ajax&style=9&return=http%3A%2F%2F192.168.1.63%2Fwizard%2Fadministrator%2Findex.php%3Foption%3Dcom_templates%26view%3Dstyle%26layout%3Dedit%26id%3D9&site=%2Fwizard%2Findex.php' rel='{handle r: 'iframe', size: {x: 600, y: 450}}';">Upload</button>-->												
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>																							
 											</span>																
 										</div>
 									 </div>	
@@ -12180,7 +12191,7 @@ function echoPage5()
 											<span class="mod-title">To the homepage slideshow</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<button data-url="" type="button" id="0" class="install-button">Upload</button>
+												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
