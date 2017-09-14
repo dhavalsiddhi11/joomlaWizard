@@ -5,8 +5,7 @@
  *
  */
 
-
-
+//error_reporting(0);
 
 define('KICKSTART', 1);
 define('VERSION', '5.3.1');
@@ -76,6 +75,7 @@ require_once JPATH_BASE.'/includes/framework.php';
 //require_once(dirname(__FILE__).DS.'helper.php');
 
 JDEBUG ? $_PROFILER->mark('afterLoad') : null;
+
 $app = JFactory::getApplication('site');
 $app->initialise();
 }
@@ -189,7 +189,7 @@ while ($filename = readdir($dh))
  * @package     wizardbackup
  * @subpackage  kickstart
  */
-
+error_reporting(0);
 define('_WIZARD_RESTORATION', 1);
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 
@@ -8979,7 +8979,7 @@ function getMenus()
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
-											<a style="display: none;" id="link<?php echo $i; ?>" class="modal btn-gray" href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
+											<a style="display: none;" id="link<?php echo $i; ?>" class="modal btn-gray"  target="_blank"   href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
 											<span class="mod-title"><?php echo $extension['name']; ?></span>
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
@@ -9015,11 +9015,7 @@ function getArticles()
 			$( document ).ready(function() {
 				
 				//add-article
-				$(".install-button").click(function() {
-					
-					
-					
-				});
+				
 				
 				$(".install-button").click(function() {
 					var idd=this.id;
@@ -9060,7 +9056,7 @@ function getArticles()
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
-											<a style="display: none;" id="link<?php echo $i; ?>" class="modal btn-gray" href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
+											<a style="display: none;" id="link<?php echo $i; ?>"  target="_blank"  class="modal btn-gray" href="" rel="{handler: 'iframe', size: {x: 600, y: 450}}">Edit</a>
 											<span class="mod-title"><?php echo $extension['name']; ?></span>
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
@@ -9088,24 +9084,85 @@ function getExtensions()
 {
 		$xml=simplexml_load_file("packages/extensions/extension_config.xml");
 		$data = json_decode(json_encode($xml), TRUE);
+		
 		$extensions=$data['extension'];
 
+		
 		?>
 		<script>
 			$( document ).ready(function() {
-								
+				
+				var user='';
+				
+					
 				$(".install-button").click(function() {
+					
+					$('#err').fadeOut('fast');	
+					//
+					$.ajax({
+					  url: "<?php echo JURI::ROOT(); ?>/administrator/wizard.php",
+					  async:false,					  
+					    beforeSend: function() {	
+					    	
+					    				    	
+						}					 
+					}).done(function(e) {
+						
+						var jsonConvertedData = $.parseJSON(e);					
+						user=jsonConvertedData.user_id;
+						//user_id
+						$('#user_id').val(user);	
+						if(user==0)
+						{
+							
+							$('#err').fadeIn('fast');	
+														
+							return false;	
+						}
+					});
+					//					
+					if(user==0)
+					{
+						return false;
+					}
+					
+					$( ".ins" ).each(function() {
+					  $( this ).attr( "disabled","disabled" );
+					});
+					
 					var idd=this.id;
 				    var dataurl=$(this).attr('data-url');
 				    $.ajax({
 					  url: "<?php echo JURI::ROOT(); ?>wizard.php?task=installextension&ename="+dataurl,
+					  async:false,
 					    beforeSend: function() {	
-					    				    											
+					    	$('#err').fadeOut('fast');	
+					    									
 							$('#process'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/loading.gif" />');
 						}					 
-					}).done(function() {
-						$('#process'+idd).html('');	
-						$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');					    
+					}).done(function(e) {
+						$('#process'+idd).html('');
+						var jsonConvertedData = $.parseJSON(e);
+						
+						if(jsonConvertedData.user_id==0)
+						{
+							$( ".ins" ).each(function() {
+							  $( this ).removeAttr( "disabled");
+							});
+							$('#err').fadeIn('fast');	
+														
+							return false;	
+						}
+						else
+						{							
+							$('#link'+idd).css('display','inline-block');
+							$('#bt'+idd).html('<img src="<?php echo JURI::ROOT(); ?>packages/assets/images/right_mark.png" />');	
+							
+							$( ".ins" ).each(function() {
+							  $( this ).removeAttr( "disabled");
+							});	
+						}
+										    
 					});
 				   
 				});
@@ -9116,10 +9173,15 @@ function getExtensions()
 		</script>
 		
 		<div class="clearfix temp-insta">
-		<div class="step4">					
+		<div class="step4">		
+				<input type="hidden" name="user_id" id="user_id" value="0" />			
 				<ul>
+					<li class="admin-log-line " id="err">
+						<p style="margin: 5px;">Please login to administartor of joomla</p>
+						<a target="_blank" class="admin-login" href="<?php echo JURI::ROOT(); ?>administrator/index.php">Admin Login</a>
+					</li>
 						<?php
-							$i=0;
+							$i=0;																			
 							foreach($extensions as $extension)
 							{
 								?>
@@ -9127,16 +9189,16 @@ function getExtensions()
 									<div  class="col eentry">
 									  <div class="eentry-panel">						
 										<div class="name center">
+											<a style="display: none;" target="_blank"  id="link<?php echo $i; ?>" class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/<?php echo $extension['configlink']; ?>" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Edit</a>
 											<span class="mod-title"><?php echo $extension['name']; ?></span>
 											<span id="process<?php echo $i; ?>" class="prc"></span>
 											<span id="bt<?php echo $i; ?>" class="prc-btn">
-												<button data-url="<?php echo $extension['zip']; ?>" type="button" id="<?php echo $i; ?>" class="install-button">Install</button>
+												<button data-url="<?php echo $extension['zip']; ?>" type="button" id="<?php echo $i; ?>" class="install-button ins">Install</button>
 											</span>											
 										</div>
 									 	</div>	
 									</div>
-								</li>
-								
+								</li>								
 								<?php
 								$i++;								
 							}
@@ -11507,7 +11569,7 @@ function echoPage()
 		</div>
 
 		<div id="header">
-			<div class="title"><div class="circle">1</div>Template Wizard</div>
+			<div class="title"><div class="circle">1</div><h2>Template Wizard</h2></div>
 		</div>
 
 		<div id="update-notification" style="display: none">
@@ -11676,6 +11738,59 @@ function echoPage2()
 		<?php echoHeadJavascript(); ?>
 		
 		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+		
+			
+		<link   href="<?php echo JURI::BASE(); ?>media/system/css/modal.css?<?php echo rand(999,9999); ?>" rel="stylesheet" type="text/css" />				
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-noconflict.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/jquery-migrate.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/jui/js/bootstrap.min.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/core.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/mootools-more.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>media/system/js/modal.js?<?php echo rand(999,9999); ?>" type="text/javascript"></script>
+		<script src="<?php echo JURI::BASE(); ?>templates/yootheme/vendor/assets/uikit/dist/js/uikit-icons.min.js?v=1.6.5" type="text/javascript"></script>
+		<script type="text/javascript">
+	
+			jQuery(function($) {
+				SqueezeBox.initialize({});
+				SqueezeBox.assign($('a.modal').get(), {
+					parse: 'rel'
+				});
+			});
+	
+			window.jModalClose = function () {
+				SqueezeBox.close();
+			};
+			
+			// Add extra modal close functionality for tinyMCE-based editors
+			document.onreadystatechange = function () {
+				if (document.readyState == 'interactive' && typeof tinyMCE != 'undefined' && tinyMCE)
+				{
+					if (typeof window.jModalClose_no_tinyMCE === 'undefined')
+					{	
+						window.jModalClose_no_tinyMCE = typeof(jModalClose) == 'function'  ?  jModalClose  :  false;
+						
+						jModalClose = function () {
+							if (window.jModalClose_no_tinyMCE) window.jModalClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+			
+					if (typeof window.SqueezeBoxClose_no_tinyMCE === 'undefined')
+					{
+						if (typeof(SqueezeBox) == 'undefined')  SqueezeBox = {};
+						window.SqueezeBoxClose_no_tinyMCE = typeof(SqueezeBox.close) == 'function'  ?  SqueezeBox.close  :  false;
+			
+						SqueezeBox.close = function () {
+							if (window.SqueezeBoxClose_no_tinyMCE)  window.SqueezeBoxClose_no_tinyMCE.apply(this, arguments);
+							tinyMCE.activeEditor.windowManager.close();
+						};
+					}
+				}
+			};
+			
+		</script>
 	</head>
 	<body>
 
@@ -11703,7 +11818,9 @@ function echoPage2()
 		</div>
 
 		
-
+		<?php	
+		 JHTML::_('behavior.modal'); 		
+		?>	
 		<div id="page1">
 			<?php callExtraFeature('onPage1'); ?>
 
@@ -11717,7 +11834,7 @@ function echoPage2()
 				
 				<div class="nxt-btn">
 					<a href="wizard.php?task=article">
-						<button class="install-button">Next</button>
+						<button class="install-button2">Next</button>
 					</a>				
 				</div>
 			</div>
@@ -12092,6 +12209,10 @@ function echoPage5()
 			
 			
 			
+			$srcfile=dirname(__FILE__)."/packages/assets/css/custom.css";
+			$dstfile=dirname(__FILE__)."/templates/".$template->template."/css/custom.css";
+			copy($srcfile, $dstfile);
+			
 			$db =JFactory::getDBO();
 		    $sql = "SELECT * FROM #__content WHERE `title` = 'Gallery'";
 		    $db->setQuery($sql);
@@ -12114,7 +12235,7 @@ function echoPage5()
 											<span class="mod-title">Logo</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=logo" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=logo" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>
 												<!-- <button data-url="" type="button" id="0" class="install-button" onclick="location.href='http://192.168.1.63/wizard/administrator/index.php?p=customizer&option=com_ajax&style=9&return=http%3A%2F%2F192.168.1.63%2Fwizard%2Fadministrator%2Findex.php%3Foption%3Dcom_templates%26view%3Dstyle%26layout%3Dedit%26id%3D9&site=%2Fwizard%2Findex.php' rel='{handle r: 'iframe', size: {x: 600, y: 450}}';">Upload</button>-->												
 											</span>																
 										</div>
@@ -12128,7 +12249,7 @@ function echoPage5()
 											<span class="mod-title">To the gallery</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=article&layout=edit&id=<?php echo $article->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=articles&filter[search]=Gallery" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
@@ -12141,7 +12262,7 @@ function echoPage5()
 											<span class="mod-title">To the homepage slideshow</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">												
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=slideshow" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_modules&filter[search]=slideshow" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
@@ -12165,7 +12286,7 @@ function echoPage5()
 											<span class="mod-title">Logo</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>																							
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>																							
 											</span>																
 										</div>
 									 </div>	
@@ -12178,7 +12299,7 @@ function echoPage5()
 											<span class="mod-title">To the gallery</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=article&layout=edit&id=<?php echo $article->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?option=com_content&view=articles&filter[search]=Gallery" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
@@ -12191,7 +12312,7 @@ function echoPage5()
 											<span class="mod-title">To the homepage slideshow</span>
 											<span id="process0" class="prc"></span>
 											<span id="bt0" class="prc-btn">
-												<a class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 800, y: 550}}">Upload</a>
+												<a  target="_blank"  class="modal btn-gray" href="<?php echo JURI::ROOT(); ?>administrator/index.php?p=customizer&option=com_ajax&style=<?php echo $template->id; ?>" rel="{handler: 'iframe', size: {x: 900, y: 550}}">Upload</a>
 											</span>											
 										</div>
 									 </div>	
@@ -12322,7 +12443,11 @@ function echoPage6()
 		AUTOMODEON
 	</div>	
 	<?php
-		$base=JPATH_BASE.'/templates/yootheme/css';
+		$db =JFactory::getDBO();
+	    $sql = "SELECT * FROM #__template_styles WHERE `home` = 1 AND `client_id`!=1";
+	    $db->setQuery($sql);
+	    $template = $db->loadObject();
+		$base=JPATH_BASE.'/templates/'.$template->template.'/css';
 		
 		if(isset($_REQUEST['saveit']))
 		{
@@ -12333,8 +12458,9 @@ function echoPage6()
 			fclose($myfile);			
 		}
 				
+				
 		$myfile = fopen($base."/custom.css", "r") or die("Unable to open file!");
-		$datas=fread($myfile,filesize($base."/custom.css"));
+		@$datas=fread($myfile,filesize(@$base."/custom.css"));
 		fclose($myfile);		
 	?>
 	<div id="page-container">
@@ -13053,10 +13179,21 @@ function kickstart_application_web()
 			$srcfile=dirname(__FILE__)."/packages/install/view/remove/tmpl/default.php";
 			$dstfile=dirname(__FILE__)."/installation/view/remove/tmpl/default.php";
 			copy($srcfile, $dstfile);
+			
+			$srcfile=dirname(__FILE__)."/packages/admin/wizard.php";
+			$dstfile=dirname(__FILE__)."/administrator/wizard.php";
+			copy($srcfile, $dstfile);
+			
+			
 					
 			break;
 
 		case 'cleanUp':
+				
+						
+			unlink(JPATH_BASE."/administrator/wizard.php");
+			unlink(JPATH_BASE."/wizard.php");
+								
 			if (!empty($json))
 			{
 				$json = json_decode($json, true);
@@ -13223,6 +13360,12 @@ function kickstart_application_web()
 			break;
 		case 'installextension':
 			
+			//echo __DIR__ . '/administrator/wizard.php';exit;
+				
+			
+			
+			//echo $user->id;exit;
+			
 			$file = JRequest::getVar('ename'); 
 			
 			$srcfile=dirname(__FILE__)."/packages/extensions/".$file;
@@ -13292,6 +13435,7 @@ function kickstart_application_web()
 			// Get an installer instance.
 			$installer = JInstaller::getInstance();
 			
+			
 			$res=array();
 			// Install the package.
 			if (!$installer->install($package['dir']))
@@ -13319,9 +13463,14 @@ function kickstart_application_web()
 				$config = JFactory::getConfig();
 				$package['packagefile'] = $config->get('tmp_path') . '/' . $package['packagefile'];
 			}
-	
+			
+						
+			$array = json_decode(json_encode($installer),TRUE);
+						  				
 			JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
-		
+			
+			$res['user_id']=$user->id;
+							
 			echo json_encode($res);
 			exit;
 			

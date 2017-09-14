@@ -11,5 +11,9 @@
 	<template>
 		<name>showroom</name>
 		<zip>yoo_showroom_demo_package_j3 (1).zip</zip>		
-	</template>		
+	</template>	
+	<template>
+		<name>tasty</name>
+		<zip>yoo_tasty_demo_package_j3(1).zip</zip>		
+	</template>	
 </templates>

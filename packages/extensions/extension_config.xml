@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extensions>
 	<extension>
-		<name>com_tcpdf_1</name>
-		<zip>com_tcpdf_1.0.4.zip</zip>		
+		<name>breezingforms</name>
+		<zip>breezingforms.zip</zip>
+		<configlink>index.php?option=com_breezingforms</configlink>
 	</extension>
 	<extension>
-		<name>com_virtuemart</name>
-		<zip>com_virtuemart.3.2.4.zip</zip>		
+		<name>mod_social_gk5</name>
+		<zip>mod_social_gk5_J!3.zip</zip>		
+		<configlink>index.php?option=com_modules&amp;filter[search]=Social GK5</configlink>
 	</extension>	
 	<extension>
-		<name>com_virtuemart4_ext_aio</name>
-		<zip>com_virtuemart.3.2.4_ext_aio.zip</zip>		
+		<name>unite_slider4.8</name>
+		<zip>unite_slider4.8.zip</zip>
+		<configlink>index.php?option=com_uniterevolution2</configlink>
+	</extension>
+	<extension>
+		<name>widgetkit_2.9.8_j3</name>
+		<zip>widgetkit_2.9.8_j3.zip</zip>
+		<configlink>index.php?option=com_widgetkit</configlink>		
 	</extension>		
 </extensions>
