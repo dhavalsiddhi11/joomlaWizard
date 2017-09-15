@@ -12402,6 +12402,75 @@ function echoPage5()
 	
 	<?php 
 }
+function echoPage7()
+{
+	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
+	$bestArchivePath = JWKickstartUtils::getBestArchivePath();
+	$filelist        = JWKickstartUtils::getArchivesAsOptions($bestArchivePath);
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		
+		<style type="text/css" media="all" rel="stylesheet">
+			<?php echoCSS();?>
+		</style>
+		<?php if (@file_exists('jquery.min.js')): ?>
+			<script type="text/javascript" src="jquery.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('json2.min.js')): ?>
+			<script type="text/javascript" src="json2.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript" src="//yandex.st/json2/2011-10-19/json2.min.js"></script>
+		<?php endif; ?>
+		<?php if (@file_exists('jquery-ui.min.js')): ?>
+			<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<?php else: ?>
+			<script type="text/javascript"
+			        src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<?php endif; ?>
+		<?php echoHeadJavascript(); ?>
+		
+		<link rel="stylesheet" type="text/css" href="packages/assets/css/style.css?<?php echo rand(999,9999); ?>">
+	</head>
+	<body>
+	<div id="automode" style="display:none;">
+		AUTOMODEON
+	</div>	
+	
+	<div id="page-container">
+
+		<div id="genericerror" class="white_content">
+			<pre id="genericerrorInner"></pre>
+		</div>				
+		<div id="header">
+			<div class="title"><h2>Finish</h2></div>
+		</div>	
+		<div id="page1">
+			<?php callExtraFeature('onPage1'); ?>
+			<div id="page1-content" class="panel-contant">				
+				<?php echo "Wizard Completed Successfully."?>						
+			</div>		
+		</div>
+		
+		
+		
+		<div id="footer">
+			<div class="copyright">Copyright &copy; <?php echo date('Y'); ?></div>
+		</div>
+
+	</div>
+
+	</body>
+	</html>
+	
+	<?php 
+}
 function echoPage6()
 {
 	$edition         = KICKSTARTPRO ? 'Professional' : 'Core';
@@ -12462,6 +12531,12 @@ function echoPage6()
 		$myfile = fopen($base."/custom.css", "r") or die("Unable to open file!");
 		@$datas=fread($myfile,filesize(@$base."/custom.css"));
 		fclose($myfile);		
+		
+		if($_REQUEST['type']=='finish')
+		{
+			$app=JFactory::getApplication();
+			$app->redirect('wizard.php?task=finish');			
+		}
 	?>
 	<div id="page-container">
 
@@ -12479,11 +12554,15 @@ function echoPage6()
 					<input type="hidden" name="saveit" id="saveit" />
 					<div class="clr"></div>				
 					<div class="nxt-btn">
+						<a href="wizard.php?task=css&type=finish">
+							<button type="button" class="install-button">Finish</button>
+						</a>
 						<a href="wizard.php?task=css">
-							<button class="install-button">Save & Finish</button>
-						</a>				
+							<button  class="install-button">Save CSS</button>
+						</a>									
 					</div>
-				</form>							
+				</form>		
+									
 			</div>		
 		</div>
 		
@@ -13191,8 +13270,8 @@ function kickstart_application_web()
 		case 'cleanUp':
 				
 						
-			unlink(JPATH_BASE."/administrator/wizard.php");
-			//unlink(JPATH_BASE."/wizard.php");
+			//unlink(JPATH_BASE."/administrator/wizard.php");
+			unlink(JPATH_BASE."/wizard.php");
 								
 			
 			clearCodeCaches();
@@ -13223,6 +13302,10 @@ function kickstart_application_web()
 		case 'css':
 			$ajax = false;
 			echoPage6();
+			break;
+		case 'finish':
+			$ajax = false;
+			echoPage7();
 			break;
 		case 'installmenu':
 			 
