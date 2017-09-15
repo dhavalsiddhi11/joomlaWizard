@@ -13192,26 +13192,9 @@ function kickstart_application_web()
 				
 						
 			unlink(JPATH_BASE."/administrator/wizard.php");
-			unlink(JPATH_BASE."/wizard.php");
+			//unlink(JPATH_BASE."/wizard.php");
 								
-			if (!empty($json))
-			{
-				$json = json_decode($json, true);
-
-				if (array_key_exists('factory', $json))
-				{
-					// Get the serialized factory
-					$serialized = $json['factory'];
-					JWFactory::unserialize($serialized);
-					JWFactory::set('kickstart.enabled', true);
-				}
-			}
-
-			$unarchiver = JWFactory::getUnarchiver(); // Get the engine
-			$postProc   = JWFactory::getPostProc();
-
-			finalizeAfterRestoration($unarchiver, $postProc);
-			removeKickstartFiles($postProc);
+			
 			clearCodeCaches();
 
 			break;
